@@ -67,18 +67,30 @@ public class Movement : MonoBehaviour
         }
         else if (Input.GetKey(KeyCode.D) != true && Motor.motorSpeed < 0)
         {
-            Motor.motorSpeed = (Motor.motorSpeed + speedUp/3.86f) + Time.deltaTime;
+            Motor.motorSpeed = (Motor.motorSpeed + speedUp/4f) + Time.deltaTime;
             Wheels[0].motor = Motor;
             Wheels[1].motor = Motor;
         }
         else if (Input.GetKey(KeyCode.A) != true && Motor.motorSpeed > 0)
         {
-            Motor.motorSpeed = (Motor.motorSpeed - speedUp/3.86f) - Time.deltaTime;
+            Motor.motorSpeed = (Motor.motorSpeed - speedUp/4f) - Time.deltaTime;
             Wheels[0].motor = Motor;
             Wheels[1].motor = Motor;
         }
-        
-
+        if (Input.GetKey(KeyCode.Space) == true && Motor.motorSpeed < 0)
+        {
+            Motor.motorSpeed = (Motor.motorSpeed + speedUp) + Time.deltaTime;
+            Wheels[0].motor = Motor;
+            Wheels[1].motor = Motor;
+            Debug.Log("Тормоз нажат");
+        }
+        else if (Input.GetKey(KeyCode.Space) == true && Motor.motorSpeed > 0)
+        {
+            Motor.motorSpeed = (Motor.motorSpeed - speedUp) + Time.deltaTime;
+            Wheels[0].motor = Motor;
+            Wheels[1].motor = Motor;
+            Debug.Log("Тормоз нажат");
+        }
         /*if (Input.GetKey(KeyCode.D))
         {
             transform.Translate(Vector2.right * speed * Time.deltaTime);
