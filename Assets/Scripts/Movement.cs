@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
+    public int speed;
+
     public int MaxSpeed;
 
     public int speedUp;
@@ -91,9 +93,19 @@ public class Movement : MonoBehaviour
             Wheels[1].motor = Motor;
             Debug.Log("Тормоз нажат");
         }
+
+        speed = (int)(Motor.motorSpeed / -20);
         /*if (Input.GetKey(KeyCode.D))
         {
             transform.Translate(Vector2.right * speed * Time.deltaTime);
         }*/
+    }
+
+    void OnGUI()
+    {
+        GUIStyle styleTime = new GUIStyle();
+        styleTime.fontSize = 20;
+        styleTime.normal.textColor = Color.white;
+        GUI.Label(new Rect(10, 10, 1200, 1200), speed + " км/ч", styleTime);
     }
 }
