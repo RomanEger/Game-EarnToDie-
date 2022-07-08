@@ -16,7 +16,7 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetAxisRaw("Horizontal") < 0 && Motor.motorSpeed < MaxSpeed/3) //GetAxisRaw; <0
+        /*if (Input.GetAxisRaw("Horizontal") < 0 && Motor.motorSpeed < MaxSpeed/3) //GetAxisRaw; <0
         {
             Motor.motorSpeed = (Motor.motorSpeed + speedUp) + Time.deltaTime;
             
@@ -44,19 +44,41 @@ public class Movement : MonoBehaviour
             {
                 Motor.motorSpeed = (Motor.motorSpeed + speedUp) + Time.deltaTime;
             }
-        }
-        /*{
-            if (Motor.motorSpeed > 0)
-            {
-                Motor.motorSpeed = (Motor.motorSpeed - speedUp) - Time.deltaTime;
-            }
-            else if (Motor.motorSpeed < 0)
-            {
-                Motor.motorSpeed = (Motor.motorSpeed + speedUp) + Time.deltaTime;
-            }
         }*/
+
+
+        if (Input.GetKey(KeyCode.A) == true && Motor.motorSpeed < MaxSpeed / 3) //GetAxisRaw; <0
+        {
+            Motor.motorSpeed = (Motor.motorSpeed + speedUp) + Time.deltaTime;
+
+            Motor.maxMotorTorque = MotorPower;
+
+            Wheels[0].motor = Motor;
+            Wheels[1].motor = Motor;
+        }
+        else if (Input.GetKey(KeyCode.D) == true && Motor.motorSpeed > -MaxSpeed) //GetAxisRaw; >0
+        {
+            Motor.motorSpeed = (Motor.motorSpeed - speedUp) - Time.deltaTime;
+
+            Motor.maxMotorTorque = MotorPower;
+
+            Wheels[0].motor = Motor;
+            Wheels[1].motor = Motor;
+        }
+        else if (Input.GetKey(KeyCode.D) != true && Motor.motorSpeed < 0)
+        {
+            Motor.motorSpeed = (Motor.motorSpeed + speedUp/3.86f) + Time.deltaTime;
+            Wheels[0].motor = Motor;
+            Wheels[1].motor = Motor;
+        }
+        else if (Input.GetKey(KeyCode.A) != true && Motor.motorSpeed > 0)
+        {
+            Motor.motorSpeed = (Motor.motorSpeed - speedUp/3.86f) - Time.deltaTime;
+            Wheels[0].motor = Motor;
+            Wheels[1].motor = Motor;
+        }
         
-        
+
         /*if (Input.GetKey(KeyCode.D))
         {
             transform.Translate(Vector2.right * speed * Time.deltaTime);
