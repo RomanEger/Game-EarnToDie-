@@ -243,8 +243,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 916d01e5ae924f34eab76969bbc7b99b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nitro: 1000
+  petrol: 10
   speed: 0
   MaxSpeed: 0
+  nitroUp: 0
   speedUp: 0
   MotorPower: 10000
   Wheels:
@@ -2179,8 +2182,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 916d01e5ae924f34eab76969bbc7b99b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nitro: 1000
+  petrol: 1000
   speed: 0
   MaxSpeed: 2000
+  nitroUp: 4
   speedUp: 3
   MotorPower: 10000
   Wheels:

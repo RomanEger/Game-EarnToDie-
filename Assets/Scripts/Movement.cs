@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    public float petrol = 10f;
+    public float nitro = 1000f;
+
+    public float petrol = 1000f;
 
     public float speed;
 
     public float MaxSpeed;
+
+    public float nitroUp;
 
     public float speedUp;
 
@@ -20,8 +24,52 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-        //движение машины вперед
-        if (Input.GetKey(KeyCode.A) == true && Motor.motorSpeed < MaxSpeed / 3) 
+        //Ускорение при движении вперед
+        if(Input.GetKey(KeyCode.LeftShift) == true && Input.GetKey(KeyCode.W) == true && Motor.motorSpeed > -MaxSpeed * 1.5f) 
+        {
+            
+            if (nitro > 0)
+            {
+                nitro -= 1;
+
+                Motor.motorSpeed = (Motor.motorSpeed - nitroUp) - Time.deltaTime;
+
+                Motor.maxMotorTorque = MotorPower;
+
+                Wheels[0].motor = Motor;
+                Wheels[1].motor = Motor;
+
+                Debug.Log("Nitro is using");
+            }
+        }
+
+        //накопление нитро
+        if (Input.GetKey(KeyCode.LeftShift) == false)
+        {
+            if (nitro < 1000f)
+            {
+                nitro += 0.1f;
+            }
+        }
+
+        //проверка топлива
+        if (Input.GetKey(KeyCode.W) == true | Input.GetKey(KeyCode.S) == true)
+        {
+            
+            petrol -= 0.05f;
+            if (petrol <= 0)
+            {
+                Debug.Log("Petrol is ended");
+                Motor.motorSpeed = 0;
+
+                Wheels[0].motor = Motor;
+                Wheels[1].motor = Motor;
+            }
+        }
+        
+
+        //движение машины НАЗАД
+        if (Input.GetKey(KeyCode.S) == true && Motor.motorSpeed < MaxSpeed / 3) 
         {
             Motor.motorSpeed = (Motor.motorSpeed + speedUp) + Time.deltaTime;
 
@@ -29,16 +77,11 @@ public class Movement : MonoBehaviour
 
             Wheels[0].motor = Motor;
             Wheels[1].motor = Motor;
-            //проверка топлива
-            petrol -= 1 + Time.deltaTime;
-            if (petrol == 0)
-            {
-                Debug.Log("Petrol is ended");
-
-            }
+            
         }
-        //движение машины назад
-        else if (Input.GetKey(KeyCode.D) == true && Motor.motorSpeed > -MaxSpeed) 
+
+        //движение машины ВПЕРЕД
+        else if (Input.GetKey(KeyCode.W) == true && Motor.motorSpeed > -MaxSpeed) //&& Input.GetKey(KeyCode.LeftShift) == false) 
         {
             Motor.motorSpeed = (Motor.motorSpeed - speedUp) - Time.deltaTime;
 
@@ -46,28 +89,38 @@ public class Movement : MonoBehaviour
 
             Wheels[0].motor = Motor;
             Wheels[1].motor = Motor;
-            //проверка топлива
-            petrol -= 1;
-            if (petrol == 0)
-            {
-                Debug.Log("Petrol is ended");
+            
+        }
 
+
+        //торможение, если не нажаты клавиши движения
+        else if (Input.GetKey(KeyCode.W) != true && Motor.motorSpeed < 0)
+        {
+            if (Input.GetKey(KeyCode.LeftShift) == false && Motor.motorSpeed < -MaxSpeed) //&& Input.GetKey(KeyCode.S) == false)
+            {
+                Motor.motorSpeed = (Motor.motorSpeed + nitroUp / 3f) + Time.deltaTime;
+                Wheels[0].motor = Motor;
+                Wheels[1].motor = Motor;
+                petrol -= 0.001f;
+            }
+            else {
+                Motor.motorSpeed = (Motor.motorSpeed + speedUp / 4f) + Time.deltaTime;
+                Wheels[0].motor = Motor;
+                Wheels[1].motor = Motor;
+                petrol -= 0.001f;
             }
         }
+
         //торможение, если не нажаты клавиши движения
-        else if (Input.GetKey(KeyCode.D) != true && Motor.motorSpeed < 0)
-        {
-            Motor.motorSpeed = (Motor.motorSpeed + speedUp/4f) + Time.deltaTime;
-            Wheels[0].motor = Motor;
-            Wheels[1].motor = Motor;
-        }
-        //торможение, если не нажаты клавиши движения
-        else if (Input.GetKey(KeyCode.A) != true && Motor.motorSpeed > 0)
+        else if (Input.GetKey(KeyCode.S) != true && Motor.motorSpeed > 0)
         {
             Motor.motorSpeed = (Motor.motorSpeed - speedUp/4f) - Time.deltaTime;
             Wheels[0].motor = Motor;
             Wheels[1].motor = Motor;
+            petrol -= 0.001f;
         }
+
+
         //тормоз
         if (Input.GetKey(KeyCode.Space) == true && Motor.motorSpeed < 0)
         {
@@ -76,6 +129,7 @@ public class Movement : MonoBehaviour
             Wheels[1].motor = Motor;
             Debug.Log("Тормоз нажат");
         }
+
         //тормоз
         else if (Input.GetKey(KeyCode.Space) == true && Motor.motorSpeed > 0)
         {
@@ -85,6 +139,8 @@ public class Movement : MonoBehaviour
             Debug.Log("Тормоз нажат");
         }
 
+        
+        //спидометр   //надо сделать правильнее
         speed = (int)(Motor.motorSpeed / -20);
         
     }

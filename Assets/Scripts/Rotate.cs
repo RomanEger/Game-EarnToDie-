@@ -8,11 +8,13 @@ public class Rotate : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.W) == true)
+        //наклон назад
+        if (Input.GetKey(KeyCode.A) == true)
         {
             transform.Rotate(Vector3.forward, rotate * Time.deltaTime);
         }
-        else if (Input.GetKey(KeyCode.S) == true)
+        //наклон вперед
+        else if (Input.GetKey(KeyCode.D) == true)
         {
             transform.Rotate(Vector3.back, rotate * Time.deltaTime);
         }
