@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    public int speed;
+    public float petrol = 10f;
 
-    public int MaxSpeed;
+    public float speed;
 
-    public int speedUp;
+    public float MaxSpeed;
+
+    public float speedUp;
 
     public int MotorPower = 10000;
 
@@ -18,38 +20,8 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-        /*if (Input.GetAxisRaw("Horizontal") < 0 && Motor.motorSpeed < MaxSpeed/3) //GetAxisRaw; <0
-        {
-            Motor.motorSpeed = (Motor.motorSpeed + speedUp) + Time.deltaTime;
-            
-            Motor.maxMotorTorque = MotorPower;
-
-            Wheels[0].motor = Motor;
-            Wheels[1].motor = Motor;
-        }
-        else if (Input.GetAxisRaw("Horizontal") > 0 && Motor.motorSpeed > -MaxSpeed) //GetAxisRaw; >0
-        {
-            Motor.motorSpeed = (Motor.motorSpeed - speedUp) - Time.deltaTime;
-
-            Motor.maxMotorTorque = MotorPower;
-
-            Wheels[0].motor = Motor;
-            Wheels[1].motor = Motor;
-        }
-        else if (Input.GetAxisRaw("Horizontal") == 0)
-        {
-            if (Motor.motorSpeed > 0)
-            {
-                Motor.motorSpeed = (Motor.motorSpeed - speedUp) - Time.deltaTime;
-            }
-            else if (Motor.motorSpeed < 0)
-            {
-                Motor.motorSpeed = (Motor.motorSpeed + speedUp) + Time.deltaTime;
-            }
-        }*/
-
-
-        if (Input.GetKey(KeyCode.A) == true && Motor.motorSpeed < MaxSpeed / 3) //GetAxisRaw; <0
+        //движение машины вперед
+        if (Input.GetKey(KeyCode.A) == true && Motor.motorSpeed < MaxSpeed / 3) 
         {
             Motor.motorSpeed = (Motor.motorSpeed + speedUp) + Time.deltaTime;
 
@@ -57,8 +29,16 @@ public class Movement : MonoBehaviour
 
             Wheels[0].motor = Motor;
             Wheels[1].motor = Motor;
+            //проверка топлива
+            petrol -= 1 + Time.deltaTime;
+            if (petrol == 0)
+            {
+                Debug.Log("Petrol is ended");
+
+            }
         }
-        else if (Input.GetKey(KeyCode.D) == true && Motor.motorSpeed > -MaxSpeed) //GetAxisRaw; >0
+        //движение машины назад
+        else if (Input.GetKey(KeyCode.D) == true && Motor.motorSpeed > -MaxSpeed) 
         {
             Motor.motorSpeed = (Motor.motorSpeed - speedUp) - Time.deltaTime;
 
@@ -66,19 +46,29 @@ public class Movement : MonoBehaviour
 
             Wheels[0].motor = Motor;
             Wheels[1].motor = Motor;
+            //проверка топлива
+            petrol -= 1;
+            if (petrol == 0)
+            {
+                Debug.Log("Petrol is ended");
+
+            }
         }
+        //торможение, если не нажаты клавиши движения
         else if (Input.GetKey(KeyCode.D) != true && Motor.motorSpeed < 0)
         {
             Motor.motorSpeed = (Motor.motorSpeed + speedUp/4f) + Time.deltaTime;
             Wheels[0].motor = Motor;
             Wheels[1].motor = Motor;
         }
+        //торможение, если не нажаты клавиши движения
         else if (Input.GetKey(KeyCode.A) != true && Motor.motorSpeed > 0)
         {
             Motor.motorSpeed = (Motor.motorSpeed - speedUp/4f) - Time.deltaTime;
             Wheels[0].motor = Motor;
             Wheels[1].motor = Motor;
         }
+        //тормоз
         if (Input.GetKey(KeyCode.Space) == true && Motor.motorSpeed < 0)
         {
             Motor.motorSpeed = (Motor.motorSpeed + speedUp) + Time.deltaTime;
@@ -86,6 +76,7 @@ public class Movement : MonoBehaviour
             Wheels[1].motor = Motor;
             Debug.Log("Тормоз нажат");
         }
+        //тормоз
         else if (Input.GetKey(KeyCode.Space) == true && Motor.motorSpeed > 0)
         {
             Motor.motorSpeed = (Motor.motorSpeed - speedUp) + Time.deltaTime;
@@ -95,10 +86,7 @@ public class Movement : MonoBehaviour
         }
 
         speed = (int)(Motor.motorSpeed / -20);
-        /*if (Input.GetKey(KeyCode.D))
-        {
-            transform.Translate(Vector2.right * speed * Time.deltaTime);
-        }*/
+        
     }
 
     void OnGUI()
