@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Home_menu : MonoBehaviour
 {
-    void Update()
+    /*void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -15,17 +15,18 @@ public class Home_menu : MonoBehaviour
         {
             Resume();
         }
-    }
-    public void Start()
+    }*/
+
+    public void StartGame()
     {
         Debug.Log("Start");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene("Game");
     }
 
-    public void Resume()
+    public void Settings()
     {
-        Debug.Log("Resume");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        Debug.Log("Settings");
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void Quit()
