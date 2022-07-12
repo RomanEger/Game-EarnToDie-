@@ -16,7 +16,7 @@ public class Movement : MonoBehaviour
 
     public float speedUp;
 
-    public int MotorPower = 10000;
+    public int MotorPower = 15000;
 
     public WheelJoint2D[] Wheels = new WheelJoint2D[2];
 
@@ -25,7 +25,7 @@ public class Movement : MonoBehaviour
     void Update()
     {
         //Ускорение при движении вперед
-        if(Input.GetKey(KeyCode.LeftShift) == true && Input.GetKey(KeyCode.W) == true && Motor.motorSpeed > -MaxSpeed * 1.5f) 
+        if(Input.GetKey(KeyCode.LeftShift) == true && Input.GetKey(KeyCode.D) == true && Motor.motorSpeed > -MaxSpeed * 1.5f) 
         {
             
             if (nitro > 0)
@@ -53,7 +53,7 @@ public class Movement : MonoBehaviour
         }
 
         //проверка топлива
-        if (Input.GetKey(KeyCode.W) == true | Input.GetKey(KeyCode.S) == true)
+        if (Input.GetKey(KeyCode.D) == true | Input.GetKey(KeyCode.A) == true)
         {
             
             petrol -= 0.05f;
@@ -69,7 +69,7 @@ public class Movement : MonoBehaviour
         
 
         //движение машины НАЗАД
-        if (Input.GetKey(KeyCode.S) == true && Motor.motorSpeed < MaxSpeed / 3) 
+        if (Input.GetKey(KeyCode.A) == true && Motor.motorSpeed < MaxSpeed / 3) 
         {
             Motor.motorSpeed = (Motor.motorSpeed + speedUp) + Time.deltaTime;
 
@@ -81,7 +81,7 @@ public class Movement : MonoBehaviour
         }
 
         //движение машины ВПЕРЕД
-        else if (Input.GetKey(KeyCode.W) == true && Motor.motorSpeed > -MaxSpeed) //&& Input.GetKey(KeyCode.LeftShift) == false) 
+        else if (Input.GetKey(KeyCode.D) == true && Motor.motorSpeed > -MaxSpeed) //&& Input.GetKey(KeyCode.LeftShift) == false) 
         {
             Motor.motorSpeed = (Motor.motorSpeed - speedUp) - Time.deltaTime;
 
@@ -94,25 +94,25 @@ public class Movement : MonoBehaviour
 
 
         //торможение, если не нажаты клавиши движения
-        else if (Input.GetKey(KeyCode.W) != true && Motor.motorSpeed < 0)
+        else if (Input.GetKey(KeyCode.D) != true && Motor.motorSpeed < 0)
         {
-            if (Input.GetKey(KeyCode.LeftShift) == false && Motor.motorSpeed < -MaxSpeed) //&& Input.GetKey(KeyCode.S) == false)
-            {
-                Motor.motorSpeed = (Motor.motorSpeed + nitroUp / 3f) + Time.deltaTime;
-                Wheels[0].motor = Motor;
-                Wheels[1].motor = Motor;
-                petrol -= 0.001f;
-            }
-            else {
+            
                 Motor.motorSpeed = (Motor.motorSpeed + speedUp / 4f) + Time.deltaTime;
                 Wheels[0].motor = Motor;
                 Wheels[1].motor = Motor;
                 petrol -= 0.001f;
-            }
+            
         }
-
+        //снижение скорости без нитро
+        if (Input.GetKey(KeyCode.LeftShift) == false && Motor.motorSpeed < -MaxSpeed) //&& Input.GetKey(KeyCode.S) == false)
+        {
+            Motor.motorSpeed = (Motor.motorSpeed + nitroUp / 3f) + Time.deltaTime;
+            Wheels[0].motor = Motor;
+            Wheels[1].motor = Motor;
+            petrol -= 0.001f;
+        }
         //торможение, если не нажаты клавиши движения
-        else if (Input.GetKey(KeyCode.S) != true && Motor.motorSpeed > 0)
+        else if (Input.GetKey(KeyCode.A) != true && Motor.motorSpeed > 0)
         {
             Motor.motorSpeed = (Motor.motorSpeed - speedUp/4f) - Time.deltaTime;
             Wheels[0].motor = Motor;
@@ -145,11 +145,11 @@ public class Movement : MonoBehaviour
         
     }
 
-    void OnGUI()
+    /*void OnGUI()
     {
         GUIStyle styleTime = new GUIStyle();
         styleTime.fontSize = 20;
         styleTime.normal.textColor = Color.white;
         GUI.Label(new Rect(10, 10, 1200, 1200), speed + " км/ч", styleTime);
-    }
+    }*/
 }
